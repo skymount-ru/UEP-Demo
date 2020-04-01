@@ -2,6 +2,8 @@
 
 1. Аутентификация
 GET http://localhost:8080/api/login
+Basic [username,password]
+* далее - Bearer <token>
 
 2. Регистрация пользователя
 POST http://localhost:8080/api/user

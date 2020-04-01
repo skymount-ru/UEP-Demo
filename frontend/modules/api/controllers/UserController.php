@@ -3,6 +3,7 @@
 namespace frontend\modules\api\controllers;
 
 use common\models\User;
+use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
 use yii\web\ForbiddenHttpException;
@@ -17,8 +18,9 @@ class UserController extends ActiveController
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        $behaviors['authenticator']['authMethods'][] = [
+        $behaviors['authenticator'] = [
             'class' => HttpBearerAuth::class,
+            'except' => ['create'],
         ];
 
         return $behaviors;

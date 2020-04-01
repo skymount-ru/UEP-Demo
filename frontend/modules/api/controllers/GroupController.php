@@ -11,11 +11,12 @@ use yii\base\ErrorException;
 use yii\db\ActiveRecord;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
+use yii\web\ForbiddenHttpException;
 use yii\web\UnauthorizedHttpException;
 
 class GroupController extends ActiveController
 {
-    public $modelClass = 'frontend\modules\api\models\Group';
+     public $modelClass = 'frontend\modules\api\models\Group';
 
     /**
      * {@inheritdoc}
@@ -30,12 +31,30 @@ class GroupController extends ActiveController
         return $behaviors;
     }
 
+    public function actions()
+    {
+        $actions = parent::actions();
+        unset($actions['index']);
+        return $actions;
+    }
+
+    public function actionIndex()
+    {
+        /** @var User $user */
+        $user = \Yii::$app->user->identity;
+        return $user->groups;
+    }
+
     /**
      * @param $id
      * @return array|ActiveRecord[]
+     * @throws ForbiddenHttpException
      */
     public function actionMessages($id)
     {
+        if (!GroupMember::findOne(['group_id' => $id, 'user_id' => \Yii::$app->user->id])) {
+            throw new ForbiddenHttpException();
+        }
         return GroupChatMessage::getForGroup($id);
     }
 

@@ -26,6 +26,7 @@ use yii\web\IdentityInterface;
  * @property string $access_token
  * @property string $access_token_expiration
  * @property bool $isAdmin
+ * @property Group[] $groups
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -246,5 +247,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function getIsAdmin()
     {
         return $this->role == User::ROLE_ADMIN;
+    }
+
+    /**
+     * Gets query for [[Groups]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroups()
+    {
+        return $this->hasMany(Group::className(), ['id' => 'group_id'])->viaTable('group_member', ['user_id' => 'id']);
     }
 }

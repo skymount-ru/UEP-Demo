@@ -20,7 +20,7 @@ class m200401_094419_group_chat_message extends Migration
         $this->createTable('{{%group_chat_message}}', [
             'id' => $this->primaryKey(),
             'message' => $this->text(),
-            'user_id' => $this->integer()->notNull(),
+            'user_id' => $this->integer(),
             'group_id' => $this->integer()->notNull(),
             'created_at' => $this->integer()->notNull(),
         ], $tableOptions);

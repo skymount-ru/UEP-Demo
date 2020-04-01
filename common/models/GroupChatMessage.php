@@ -4,6 +4,7 @@
 namespace common\models;
 
 
+use common\components\ChatBot;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\Console;
 
@@ -23,10 +24,11 @@ class GroupChatMessage extends db\BaseGroupChatMessage
     /**
      * @param $groupId
      * @param string $message
+     * @param $userId
      * @return bool
-     * @throws \Exception
+     * @throws \Throwable
      */
-    public static function post($groupId, string $message): bool
+    public static function post($groupId, string $message, $userId): bool
     {
         if (empty($message)) {
             return false;
@@ -43,7 +45,7 @@ class GroupChatMessage extends db\BaseGroupChatMessage
             foreach ($groupIds as $id) {
                 $model = new GroupChatMessage([
                     'message'  => $message,
-                    'user_id'  => \Yii::$app->user->id,
+                    'user_id'  => $userId,
                     'group_id' => $id,
                 ]);
                 $model->created_at = time();
@@ -58,6 +60,10 @@ class GroupChatMessage extends db\BaseGroupChatMessage
         } catch (\Throwable $e) {
             $transaction->rollBack();
             throw $e;
+        }
+
+        if ($groupId !== null && mb_substr($message, 0, 1) == '\\') {
+            (new ChatBot)->parseMessage(mb_substr($message, 1), $groupId);
         }
 
         return true;

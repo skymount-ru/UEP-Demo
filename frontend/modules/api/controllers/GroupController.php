@@ -75,7 +75,7 @@ class GroupController extends ActiveController
         }
 
         return [
-            'result' => GroupChatMessage::post($id, (string) Yii::$app->request->post('message')),
+            'result' => GroupChatMessage::post($id, (string) Yii::$app->request->post('message'), \Yii::$app->user->id),
         ];
     }
 

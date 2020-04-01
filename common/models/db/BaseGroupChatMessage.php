@@ -11,7 +11,7 @@ use Yii;
  *
  * @property int $id
  * @property string|null $message
- * @property int $user_id
+ * @property int|null $user_id
  * @property int $group_id
  * @property int $created_at
  *
@@ -35,8 +35,8 @@ class BaseGroupChatMessage extends \yii\db\ActiveRecord
     {
         return [
             [['message'], 'string'],
-            [['user_id', 'group_id', 'created_at'], 'required'],
             [['user_id', 'group_id', 'created_at'], 'integer'],
+            [['group_id', 'created_at'], 'required'],
             [['group_id'], 'exist', 'skipOnError' => true, 'targetClass' => Group::className(), 'targetAttribute' => ['group_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];

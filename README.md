@@ -1,5 +1,43 @@
 # UEP Demo App
 
+1. Аутентификация
+GET http://localhost:8080/api/login
+
+2. Регистрация пользователя
+POST http://localhost:8080/api/user
+[username, email, password]
+
+3. Список пользователей (список всех пользователей доступен всем)
+GET http://localhost:8080/api/user
+
+4. Получение списка групп (у каждого пользователя свой список групп)
+GET http://localhost:8080/api/group
+
+5. Получение списка сообщений в группе
+GET http://localhost:8080/api/group/messages
+
+6. Создание группы (в группе может быть несколько человек)
+POST http://localhost:8080/api/group
+[title]
+
+7. Добавление пользователя в группу из списка всех пользователей
+POST http://localhost:8080/api/group/1/user/3
+
+8. Отправка сообщения в чат группы (пользователь может отправлять сообщения только в те группы в которых он состоит)
+POST http://localhost:8080/api/group/1/message
+[message]
+
+
+9. Аутентификация как администратор
+9.1 Список пользователей
+9.2 Удаление пользователя
+DELETE GET http://localhost:8080/api/user/1
+
+9.3 Отправка сообщения во все группы у всех пользователей
+POST http://localhost:8080/api/group/broad-message
+[message]
+
+
 DIRECTORY STRUCTURE
 -------------------
 

@@ -21,12 +21,17 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ *
+ * @property string $access_token
+ * @property string $access_token_expiration
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
-    const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+
+    const ROLE_USER = 10;
+    const ROLE_ADMIN = 50;
 
 
     /**
@@ -53,8 +58,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
 
@@ -71,7 +76,20 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        if ($type === \yii\filters\auth\HttpBearerAuth::class) {
+            return static::find()
+                ->where([
+                    'and',
+                    ['access_token' => $token],
+                    ['>', 'access_token_expiration', time()],
+                ])
+                ->orWhere([
+                    'auth_key' => $token,
+                ])
+                ->one();
+        }
+
+        return false;
     }
 
     /**

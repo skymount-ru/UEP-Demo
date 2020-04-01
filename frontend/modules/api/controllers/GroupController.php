@@ -2,11 +2,16 @@
 
 namespace frontend\modules\api\controllers;
 
-use common\models\Group;
 use common\models\GroupChatMessage;
 use common\models\GroupMember;
+use common\models\User;
+use Exception;
+use Yii;
+use yii\base\ErrorException;
+use yii\db\ActiveRecord;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
+use yii\web\UnauthorizedHttpException;
 
 class GroupController extends ActiveController
 {
@@ -27,7 +32,7 @@ class GroupController extends ActiveController
 
     /**
      * @param $id
-     * @return array|\yii\db\ActiveRecord[]
+     * @return array|ActiveRecord[]
      */
     public function actionMessages($id)
     {
@@ -38,7 +43,7 @@ class GroupController extends ActiveController
      * @param $id
      * @param $user_id
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function actionAddUser($id, $user_id)
     {
@@ -48,10 +53,44 @@ class GroupController extends ActiveController
     /**
      * @param $id
      * @return mixed
-     * @throws \yii\base\ErrorException
+     * @throws ErrorException
      */
     public function actionMembers($id)
     {
         return GroupMember::getForGroup($id);
+    }
+
+    /**
+     * Sends a chat message.
+     *
+     * @param $id
+     * @param bool $skipUserCheck
+     * @return array
+     * @throws UnauthorizedHttpException
+     */
+    public function actionPostMessage($id, $skipUserCheck = false)
+    {
+        if (!$skipUserCheck && GroupMember::checkIfUserInGroup($id) === false) {
+            throw new UnauthorizedHttpException();
+        }
+
+        return [
+            'result' => GroupChatMessage::post($id, (string) Yii::$app->request->post('message')),
+        ];
+    }
+
+    /**
+     * Sends messages to the all chats.
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function actionBroadMessage()
+    {
+        if (Yii::$app->user->identity->role !== User::ROLE_ADMIN) {
+            throw new UnauthorizedHttpException();
+        }
+
+        return $this->actionPostMessage(null, true);
     }
 }

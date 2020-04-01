@@ -17,6 +17,7 @@ use yii\web\IdentityInterface;
  * @property string $verification_token
  * @property string $email
  * @property string $auth_key
+ * @property integer $role
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -24,6 +25,7 @@ use yii\web\IdentityInterface;
  *
  * @property string $access_token
  * @property string $access_token_expiration
+ * @property bool $isAdmin
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -235,5 +237,14 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->access_token = Yii::$app->security->generateRandomString() . '_' . time();
         $this->access_token_expiration = time() + 86400 * 30;
+    }
+
+    /**
+     * Check if the user has Admin Role
+     * @return bool
+     */
+    public function getIsAdmin()
+    {
+        return $this->role == User::ROLE_ADMIN;
     }
 }

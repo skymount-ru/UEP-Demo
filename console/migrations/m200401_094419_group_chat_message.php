@@ -25,8 +25,8 @@ class m200401_094419_group_chat_message extends Migration
             'created_at' => $this->integer()->notNull(),
         ], $tableOptions);
 
-        $this->addForeignKey('{{%fk-group_chat_message-user}}', '{{%group_chat_message}}', 'user_id', '{{%user}}', 'id');
-        $this->addForeignKey('{{%fk-group_chat_message-group}}', '{{%group_chat_message}}', 'group_id', '{{%group}}', 'id');
+        $this->addForeignKey('{{%fk-group_chat_message-user}}', '{{%group_chat_message}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('{{%fk-group_chat_message-group}}', '{{%group_chat_message}}', 'group_id', '{{%group}}', 'id', 'CASCADE', 'CASCADE');
     }
 
     /**

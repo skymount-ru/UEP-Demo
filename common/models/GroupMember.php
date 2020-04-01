@@ -41,4 +41,12 @@ class GroupMember extends db\BaseGroupMember
 
         return $group->groupMembers;
     }
+
+    public static function checkIfUserInGroup($groupId): bool
+    {
+        return GroupMember::find()->where([
+            'user_id' => \Yii::$app->user->id,
+            'group_id' => $groupId,
+        ])->exists();
+    }
 }

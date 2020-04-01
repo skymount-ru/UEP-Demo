@@ -2,8 +2,10 @@
 
 namespace frontend\modules\api\controllers;
 
+use common\models\User;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
+use yii\web\ForbiddenHttpException;
 
 class UserController extends ActiveController
 {
@@ -20,5 +22,18 @@ class UserController extends ActiveController
         ];
 
         return $behaviors;
+    }
+
+    public function checkAccess($action, $model = null, $params = [])
+    {
+        /** @var User $user */
+        $user = \Yii::$app->user->identity;
+
+        switch ($action) {
+            case 'delete':
+                if (!$user->isAdmin) {
+                    throw new ForbiddenHttpException();
+                }
+        }
     }
 }

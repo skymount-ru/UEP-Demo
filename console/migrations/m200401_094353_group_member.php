@@ -24,8 +24,8 @@ class m200401_094353_group_member extends Migration
 
         $this->createIndex('{{%idx-group_member-user-group}}', '{{%group_member}}', ['user_id', 'group_id'], true);
 
-        $this->addForeignKey('{{%fk-group_member-user}}', '{{%group_member}}', 'user_id', '{{%user}}', 'id');
-        $this->addForeignKey('{{%fk-group_member-group}}', '{{%group_member}}', 'group_id', '{{%group}}', 'id');
+        $this->addForeignKey('{{%fk-group_member-user}}', '{{%group_member}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('{{%fk-group_member-group}}', '{{%group_member}}', 'group_id', '{{%group}}', 'id', 'CASCADE', 'CASCADE');
     }
 
     /**

@@ -11,6 +11,7 @@ return [
     'DELETE api/user/<id:\d+>' => 'api/user/delete',
 
     'GET api/group'                               => 'api/group/index',
+    'GET api/group/<id:\d+>/members'              => 'api/group/members',
     'GET api/group/<id:\d+>/messages'             => 'api/group/messages',
     'POST api/group'                              => 'api/group/create',
     'POST api/group/<id:\d+>/user/<user_id:\d+>'  => 'api/group/add-user',

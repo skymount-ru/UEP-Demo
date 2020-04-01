@@ -4,7 +4,7 @@
 namespace common\models;
 
 
-class Group extends \common\BaseGroup
+class Group extends db\BaseGroup
 {
 
 }

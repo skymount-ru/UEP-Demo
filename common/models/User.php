@@ -235,8 +235,5 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->access_token = Yii::$app->security->generateRandomString() . '_' . time();
         $this->access_token_expiration = time() + 86400 * 30;
-        $this->save();
-
-        return $this->access_token;
     }
 }

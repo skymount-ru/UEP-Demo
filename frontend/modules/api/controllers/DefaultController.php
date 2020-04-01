@@ -40,6 +40,7 @@ class DefaultController extends Controller
 
     public function actionLogin()
     {
-        return $this->asJson(['token' => \Yii::$app->user->identity->generateAccessToken()]);
+        \Yii::$app->user->identity->generateAccessToken();
+        return $this->asJson(['token' => \Yii::$app->user->identity->access_token]);
     }
 }

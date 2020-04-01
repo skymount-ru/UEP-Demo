@@ -45,6 +45,15 @@ class User extends ActiveRecord implements IdentityInterface
         return '{{%user}}';
     }
 
+    public static function getList()
+    {
+        return User::find()
+            ->select('username')
+            ->indexBy('id')
+            ->orderBy('username')
+            ->column();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -133,7 +142,6 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByVerificationToken($token) {
         return static::findOne([
             'verification_token' => $token,
-            'status' => self::STATUS_INACTIVE
         ]);
     }
 

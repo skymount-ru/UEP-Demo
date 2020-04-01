@@ -2,6 +2,8 @@
 
 return [
     '/' => 'site/index',
+    '/login' => 'site/login',
+    '/signup' => 'site/signup',
 
     'api/login' => 'api/default/login',
 

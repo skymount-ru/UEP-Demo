@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\composers\IndexComposer;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -74,7 +75,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if (\Yii::$app->user->isGuest) {
+            return $this->render('index');
+        } else {
+            return $this->render('chat', (new IndexComposer)->viewData());
+        }
     }
 
     /**
@@ -154,7 +159,7 @@ class SiteController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            Yii::$app->session->setFlash('success', 'Thank you for registration.');
             return $this->goHome();
         }
 
